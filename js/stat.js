@@ -39,7 +39,10 @@ window.renderStatistics = function (ctx, names, times) {
   var maxTime = getMaxElement(times);
 
   for (var i = 0; i < names.length; i++) {
-    var intNumber = Math.round(times[i]);
+    var time = Math.round(times[i]);
+    var heightPlayer = time * BAR_HEIGHT / maxTime;
+    var xCoordinate = CLOUD_X + BAR_WIDTH + (BAR_WIDTH + COLUMN_GAP) * i;
+    var yCoordinate = CLOUD_HEIGHT - FONT_GAP;
 
     if (names[i].indexOf('Вы') === 0) {
       ctx.fillStyle = 'rgba(255, 0, 0, 1)';
@@ -49,9 +52,9 @@ window.renderStatistics = function (ctx, names, times) {
       ctx.fillStyle = color;
     }
 
-    ctx.fillRect(CLOUD_X + BAR_WIDTH + (BAR_WIDTH + COLUMN_GAP) * i, CLOUD_HEIGHT - FONT_GAP, BAR_WIDTH, (intNumber * BAR_HEIGHT) / maxTime);
+    ctx.fillRect(xCoordinate, yCoordinate, BAR_WIDTH, (time * BAR_HEIGHT) / maxTime);
     ctx.fillStyle = '#000';
-    ctx.fillText(names[i], CLOUD_X + BAR_WIDTH + (BAR_WIDTH + COLUMN_GAP) * i, CLOUD_HEIGHT);
-    ctx.fillText(intNumber, CLOUD_X + BAR_WIDTH + (BAR_WIDTH + COLUMN_GAP) * i, CLOUD_HEIGHT - FONT_GAP - Math.abs(intNumber * BAR_HEIGHT / maxTime) - GAP);
+    ctx.fillText(names[i], xCoordinate, CLOUD_HEIGHT);
+    ctx.fillText(time, xCoordinate, yCoordinate - Math.abs(heightPlayer) - GAP);
   }
 };
