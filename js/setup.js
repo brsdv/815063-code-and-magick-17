@@ -9,23 +9,24 @@ var coatColors = ['rgb(101, 137, 164)', 'rgb(241, 43, 107)', 'rgb(146, 100, 161)
 var eyesColors = ['black', 'red', 'blue', 'yellow', 'green'];
 var fireballsColors = ['#ee4830', '#30a8ee', '#5ce6c0', '#e848d5', '#e6e848'];
 
-var profileWizard = document.querySelector('.setup'); // DOM-элемент поп-апа
-var setupWizard = document.querySelector('.setup-wizard'); // DOM-элемент svg-контейнера (вьюбокса) Волшебника
-var wizardCoat = setupWizard.querySelector('.wizard-coat'); // DOM-элемент мантии Волшебника
-var wizardEye = setupWizard.querySelector('.wizard-eyes'); // DOM-элемент глаз Волшебника
-var wizardFireball = document.querySelector('.setup-fireball-wrap'); // DOM-элемент фаерболла Волшебника
-var profileOpen = document.querySelector('.setup-open'); // DOM-элемент иконки профиля
-var profileClose = profileWizard.querySelector('.setup-close'); // DOM-элемент иконки-крестика в поп-апе
-var setupUserName = profileWizard.querySelector('.setup-user-name'); // DOM-элемент поля ввода имени Волшебника
-
-var similarContainer = document.querySelector('.setup-similar');
-similarContainer.classList.remove('hidden');
-
-var similarList = document.querySelector('.setup-similar-list');
+var profileStartX; // Переменная для стартовой координаты X
+var profileStartY; // Переменная для стартовой координаты Y
+var profileWizard = document.querySelector('.setup'); // Поп-ап профиль
+var setupWizard = document.querySelector('.setup-wizard'); // Svg вьюбокс волшебника
+var wizardCoat = setupWizard.querySelector('.wizard-coat'); // Мантия волшебника
+var wizardEye = setupWizard.querySelector('.wizard-eyes'); // Глаза волшебника
+var wizardFireball = document.querySelector('.setup-fireball-wrap'); // Фаерболл волшебника
+var profileOpen = document.querySelector('.setup-open'); // Иконка профиля
+var profileClose = profileWizard.querySelector('.setup-close'); // Иконка закрытия поп-апа
+var setupUserName = profileWizard.querySelector('.setup-user-name'); // Поле ввода имени Волшебника
+var similarList = document.querySelector('.setup-similar-list'); // Контейнер всех волшебников
 var similarWizardTemplate = document.querySelector('#similar-wizard-template')
     .content
-    .querySelector('.setup-similar-item');
+    .querySelector('.setup-similar-item'); // Шаблон волшебника Document-fragmet
+var similar = document.querySelector('.setup-similar');
+similar.classList.remove('hidden'); // Показываем похожих волшебников
 
+// Генерируем рандомные свойства объекта волшебников в массив
 var getGenerationRandomObjects = function (name, surname, coat, eye) {
   var arrObj = [];
 
@@ -49,6 +50,7 @@ var getGenerationRandomObjects = function (name, surname, coat, eye) {
 
 var wizards = getGenerationRandomObjects(names, surnames, coatColors, eyesColors);
 
+// Создаем разметку из шаблона для похожего волшебника
 var createWizardElement = function (wizard) {
   var wizardElement = similarWizardTemplate.cloneNode(true);
 
@@ -59,6 +61,7 @@ var createWizardElement = function (wizard) {
   return wizardElement;
 };
 
+// Рендерим шаблоны в Document-fragmet
 var renderWizardElement = function () {
   var fragment = document.createDocumentFragment();
 
@@ -69,49 +72,57 @@ var renderWizardElement = function () {
   return fragment;
 };
 
-similarList.appendChild(renderWizardElement());
+similarList.appendChild(renderWizardElement()); // Вставляем Document-fragmet в разметку
 
-// Функция обработчика события на кнопку ESC (вызывать не нужно!)
+// Закрытие поп-апа на ESC если не активно поле ввода имени
 var PopupKeydownHandler = function (evt) {
   if (evt.keyCode === ESC_KEY && document.activeElement !== setupUserName) {
     closePopup();
   }
 };
 
+// Записываем начальные координаты поп-апу
+var setStartPosition = function () {
+  profileWizard.style.left = profileStartX + 'px';
+  profileWizard.style.top = profileStartY + 'px';
+};
+
 var openPopup = function () {
   profileWizard.classList.remove('hidden');
   document.addEventListener('keydown', PopupKeydownHandler);
+
+  // Запоминаем координаты поп-апа при открытии
+  profileStartX = profileWizard.offsetLeft;
+  profileStartY = profileWizard.offsetTop;
 };
 
 var closePopup = function () {
   profileWizard.classList.add('hidden');
   document.removeEventListener('keydown', PopupKeydownHandler);
+  setStartPosition();
 };
 
-// Добавляю обработчик на клик, чтобы открыть поп-ап, в обработчике вызываю функцию которая добавляет обработчик на ESC
 profileOpen.addEventListener('click', function () {
   openPopup();
 });
 
-// Добавляю обработчик на иконку профиля, когда она в фокусе открывать поп-ап по нажантию ENTER
 profileOpen.addEventListener('keydown', function (evt) {
   if (evt.keyCode === ENTER_KEY) {
     openPopup();
   }
 });
 
-// Добавляю обработчик на клик, чтобы закрыть поп-ап, в обработчике вызываю функцию которая удаляет обработчик на ESC
 profileClose.addEventListener('click', function () {
   closePopup();
 });
 
-// Добавляю обработчик на кнопку-крестик в поп-апе, когда она в фокусе закрывать поп-ап по нажантию ENTER
 profileClose.addEventListener('keydown', function (evt) {
   if (evt.keyCode === ENTER_KEY) {
     closePopup();
   }
 });
 
+// Записываем рондомные цвета для стилей и скрытых input'ов
 var setupWizardColor = function (attr, wizard, random) {
   var setupWizardInputs = document.querySelector('.setup-player').querySelectorAll('input');
 
@@ -130,8 +141,6 @@ var setupWizardColor = function (attr, wizard, random) {
   }
 };
 
-/* Добавляю обработчики на клик по мантии, глаза и фаербол волшебника, у которого будет
-меняться рандомно цвет, скрытое поле input так же будет принимать это значение цвета */
 wizardCoat.addEventListener('click', function (evt) {
   var randomCoat = coatColors[Math.floor(Math.random() * coatColors.length)];
 
