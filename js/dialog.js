@@ -2,7 +2,6 @@
 
 var setupDialog = document.querySelector('.setup');
 var dialogHandle = setupDialog.querySelector('.upload');
-var closeDialog = setupDialog.querySelector('.setup-close');
 var shopElement = document.querySelector('.setup-artifacts-shop');
 var artifactsElement = document.querySelector('.setup-artifacts');
 var draggedItem = null;
@@ -15,6 +14,7 @@ dialogHandle.addEventListener('mousedown', function (evt) {
     y: evt.clientY
   };
 
+  // Флаг закрузки аватара
   var dragged = false;
 
   var mouseMoveHandler = function (evtMove) {
@@ -38,6 +38,7 @@ dialogHandle.addEventListener('mousedown', function (evt) {
   var mouseUpHandler = function (evtUp) {
     evtUp.preventDefault();
 
+    // Если флаг true сбрасываем дефолтное поводение загрузки аватара
     if (dragged) {
       var ClickPreventDefaultHandler = function (evtDrag) {
         evtDrag.preventDefault();
@@ -50,15 +51,8 @@ dialogHandle.addEventListener('mousedown', function (evt) {
     document.removeEventListener('mouseup', mouseUpHandler);
   };
 
-  var clickCloseHandler = function (evtClick) {
-    evtClick.preventDefault();
-    setupDialog.style.left = startCoordinate.x + 'px'; // Беру стартовые координаты, но они уже измененные и получается совсес не стартовые
-    setupDialog.style.top = startCoordinate.y + 'px';
-  };
-
   document.addEventListener('mousemove', mouseMoveHandler);
   document.addEventListener('mouseup', mouseUpHandler);
-  closeDialog.addEventListener('click', clickCloseHandler);
 });
 
 shopElement.addEventListener('dragstart', function (evt) {
