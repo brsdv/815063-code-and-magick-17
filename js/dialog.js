@@ -4,6 +4,7 @@
   var profileStartX; // Стартовая координата X
   var profileStartY; // Стартовая координата Y
   var setupDialog = document.querySelector('.setup');
+  var form = setupDialog.querySelector('.setup-wizard-form');
   var dialogHandle = setupDialog.querySelector('.upload');
   var profileOpen = document.querySelector('.setup-open'); // Иконка профиля
   var profileClose = setupDialog.querySelector('.setup-close'); // Иконка закрытия поп-апа
@@ -126,5 +127,33 @@
   artifactsElement.addEventListener('drop', function (evt) {
     evt.target.style.backgroundColor = '';
     evt.target.appendChild(draggedItem);
+  });
+
+  var successHandler = function () {
+    setupDialog.classList.add('hidden');
+  };
+
+  var errorHandler = function (err) {
+    var setupFooter = document.querySelector('.setup-footer');
+    var errorElement = document.createElement('div');
+    errorElement.style.backgroundColor = 'red';
+    errorElement.style.borderBottom = '3px solid #a94545';
+    errorElement.style.color = 'white';
+    errorElement.style.fontSize = '20px';
+    errorElement.style.textAlign = 'center';
+    errorElement.style.padding = '5px';
+    errorElement.style.marginTop = '5px';
+    errorElement.textContent = err;
+    setupFooter.appendChild(errorElement);
+
+    throw new Error(err);
+  };
+
+  form.addEventListener('submit', function (evt) {
+    var formData = new FormData(form);
+
+    window.backend.save(formData, successHandler, errorHandler);
+
+    evt.preventDefault();
   });
 })();
