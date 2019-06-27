@@ -130,7 +130,7 @@
   });
 
   var successHandler = function () {
-    setupDialog.classList.add('hidden');
+    closePopup();
   };
 
   var errorHandler = function (err) {

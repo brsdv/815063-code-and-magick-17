@@ -42,18 +42,18 @@
     return wizardElement;
   };
 
-  var loadHandler = function (wizLoad) {
+  var successHandler = function (wizLoad) {
     var fragment = document.createDocumentFragment();
-    var randElement = shuffle(wizLoad);
+    var modifyWizLoad = shuffle(wizLoad);
 
     for (var i = 0; i < 4; i++) {
-      fragment.appendChild(createWizard(randElement[i]));
+      fragment.appendChild(createWizard(modifyWizLoad[i]));
     }
 
     similarList.appendChild(fragment);
   };
 
-  var errorHandler = function (wizErr) {
+  var errorHandler = function (wizLoadErr) {
     var errorElement = document.createElement('div');
     errorElement.style.backgroundColor = 'red';
     errorElement.style.borderBottom = '3px solid #a94545';
@@ -61,13 +61,13 @@
     errorElement.style.fontSize = '24px';
     errorElement.style.textAlign = 'center';
     errorElement.style.padding = '5px';
-    errorElement.textContent = wizErr;
+    errorElement.textContent = wizLoadErr;
     similar.appendChild(errorElement);
 
-    throw new Error(wizErr);
+    throw new Error(wizLoadErr);
   };
 
-  window.backend.load(loadHandler, errorHandler);
+  window.backend.load(successHandler, errorHandler);
 
   window.colorize('coat-color', wizardCoat, coatColors);
   window.colorize('eyes-color', wizardEye, eyesColors);
