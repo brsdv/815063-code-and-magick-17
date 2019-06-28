@@ -4,7 +4,9 @@
   var profileStartX; // Стартовая координата X
   var profileStartY; // Стартовая координата Y
   var setupDialog = document.querySelector('.setup');
+  var setupFooter = document.querySelector('.setup-footer');
   var form = setupDialog.querySelector('.setup-wizard-form');
+  var submit = setupDialog.querySelector('.setup-submit');
   var dialogHandle = setupDialog.querySelector('.upload');
   var profileOpen = document.querySelector('.setup-open'); // Иконка профиля
   var profileClose = setupDialog.querySelector('.setup-close'); // Иконка закрытия поп-апа
@@ -130,11 +132,11 @@
   });
 
   var successHandler = function () {
+    submit.disabled = false;
     closePopup();
   };
 
   var errorHandler = function (err) {
-    var setupFooter = document.querySelector('.setup-footer');
     var errorElement = document.createElement('div');
     errorElement.style.backgroundColor = 'red';
     errorElement.style.borderBottom = '3px solid #a94545';
@@ -146,6 +148,8 @@
     errorElement.textContent = err;
     setupFooter.appendChild(errorElement);
 
+    submit.disabled = false;
+
     throw new Error(err);
   };
 
@@ -153,6 +157,8 @@
     var formData = new FormData(form);
 
     window.backend.save(formData, successHandler, errorHandler);
+
+    submit.disabled = true;
 
     evt.preventDefault();
   });
