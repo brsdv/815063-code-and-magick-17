@@ -44,12 +44,6 @@
     similarList.appendChild(renderWizard(wizards));
   };
 
-  // Объект для передачи текущего цвета
-  var wizardChange = {
-    onCoatChange: function (color) {},
-    onEyesChange: function (color) {}
-  };
-
   // Получаем рандомный цвет из массива
   var getRandomElement = function (arr) {
     var randIndex = Math.floor(Math.random() * arr.length);
@@ -71,28 +65,22 @@
   wizardCoat.addEventListener('click', function () {
     var currentColor = getRandomElement(COAT_COLORS);
     wizardCoat.style.fill = currentColor;
-
     inputColor('coat-color', currentColor);
 
-    wizardChange.onCoatChange(currentColor);
+    window.coatChangeHandler(currentColor);
   });
 
   wizardEye.addEventListener('click', function () {
     var currentColor = getRandomElement(EYES_COLORS);
     wizardEye.style.fill = currentColor;
-
     inputColor('eyes-color', currentColor);
 
-    wizardChange.onEyesChange(currentColor);
+    window.eyesChangeHandler(currentColor);
   });
 
   wizardFireball.addEventListener('click', function () {
     var currentColor = getRandomElement(FIRE_COLORS);
     wizardFireball.style.background = currentColor;
-
     inputColor('fireball-color', currentColor);
   });
-
-  window.wizard = wizardChange;
-  return wizardChange;
 })();

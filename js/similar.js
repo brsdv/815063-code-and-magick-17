@@ -32,12 +32,12 @@
     }));
   };
 
-  window.wizard.onCoatChange = function (color) {
+  window.coatChangeHandler = function (color) {
     coatColor = color;
     window.debounce(updateWizards);
   };
 
-  window.wizard.onEyesChange = function (color) {
+  window.eyesChangeHandler = function (color) {
     eyesColor = color;
     window.debounce(updateWizards);
   };
