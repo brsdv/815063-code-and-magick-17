@@ -19,7 +19,6 @@
 
       reader.addEventListener('load', function () {
         preview.src = reader.result;
-        console.log(reader);
       });
 
       reader.readAsDataURL(file);
