@@ -1,7 +1,6 @@
 # Учебный проект «Код и Магия» [![Build status][travis-image]][travis-url]
 
 * Студент: [Борис Давыденко](https://up.htmlacademy.ru/javascript/17/user/815063).
-* Наставник: `Неизвестно`.
 
 ---
 
